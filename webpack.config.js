@@ -25,13 +25,7 @@ module.exports = {
       // MAKE SURE THIS SASS STUFF WORKS
       {
         test: /\.(sa|sc|c)ss$/,
-        use: [
-          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
-          //   'style-loader',
-          'css-loader',
-          'postcss-loader',
-          'sass-loader',
-        ],
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
     ],
   },
