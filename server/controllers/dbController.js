@@ -37,4 +37,26 @@ dbController.getMessages = async (req, res, next) => {
   }
 };
 
+dbController.postMessages = async (req, res, next) => {
+  try {
+    res.locals.newMessage = [
+      {
+        _id: '9999',
+        sender_id: '5678',
+        message: 'initial commit',
+        time: '2023-02-04T20:53:48.789Z',
+      },
+    ];
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'getMessages',
+        type: 'catch all block getting messages',
+        err: err,
+      })
+    );
+  }
+};
+
 module.exports = dbController;
