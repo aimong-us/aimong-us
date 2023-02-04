@@ -3,4 +3,4 @@ import { createRoot } from 'react-dom/client';
 import Chat from './components/chat.jsx';
 
 const root = createRoot(document.getElementById('root'));
-root.render(<Chat />);
+root.render(<Signup />);
