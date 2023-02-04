@@ -7,9 +7,13 @@ const app = express();
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
 
+const routerAPI = require('./routes/api.js');
+
 app.use(express.json());
 
-//prduction env build routes for homepage, static files
+app.use('/api', routerAPI);
+
+//production env build routes for homepage, static files
 if (process.env.NODE_ENV === 'production') {
   app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
   app.get('/', (req, res) =>
