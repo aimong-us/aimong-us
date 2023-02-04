@@ -1,0 +1,5 @@
+const db = require('../models/chatroomModels.js');
+
+const userController = {};
+
+module.exports = userController;
