@@ -13,6 +13,38 @@ app.use(express.json());
 
 app.use('/api', routerAPI);
 
+app.get('/login', (req, res) => {
+  res
+    .status(200)
+    .sendFile(path.resolve(__dirname, '..', 'client', 'login.html'));
+});
+
+app.get('/signup', (req, res) => {
+  res
+    .status(200)
+    .sendFile(path.resolve(__dirname, '..', 'client', 'signup.html'));
+});
+
+app.post(
+  '/login',
+  //middleware in usercontroller to verify username
+  //middleware in usercontorller to verify pw
+  //middleware in usercontroller to generate session
+  //middleware in cookieController to set session cookie
+  (req, res) => {
+    res.status(302).redirect('/');
+  }
+);
+
+app.post(
+  '/signup',
+  //middleware in dbController to create username and pw and session
+  //middleware in cookieController to set session cookie
+  (req, res) => {
+    res.status(302).redirect('/');
+  }
+);
+
 //production env build routes for homepage, static files
 if (process.env.NODE_ENV === 'production') {
   app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
