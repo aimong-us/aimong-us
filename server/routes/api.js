@@ -10,12 +10,21 @@ router.post('/messages', dbController.postMessages, (req, res) => {
   return res.status(201).json({ messages: res.locals.newMessage });
 });
 
-// router.get('/messages', dbController.getUsers, (req, res) => {
-//   return res.status(200).json({ messages: res.locals.messages });
-// });
+// get a full list of users
+router.get('/users', dbController.getUsers, (req, res) => {
+  return res.status(200).json({ users: res.locals.users });
+});
 
-// router.post('/messages', dbController.postUsers, (req, res) => {
-//   return res.status(201).json({ messages: res.locals.newMessage });
-// });
+router.get('/users/:username', dbController.getUserByUsername, (req, res) => {
+  const { user } = res.locals;
+  return res.status(200).json(user);
+});
+
+// create a new user with username, password and email...
+router.post('/users', dbController.postUser, (req, res) => {
+  const { user } = res.locals;
+
+  return res.status(201).json(user);
+});
 
 module.exports = router;
