@@ -22,7 +22,22 @@ module.exports = {
           },
         },
       },
+      // MAKE SURE THIS SASS STUFF WORKS
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+          //   'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
+      },
     ],
+  },
+  resolve: {
+    // Enable importing JS / JSX files without specifying their extension
+    extensions: ['.js', '.jsx'],
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -34,7 +49,7 @@ module.exports = {
       directory: path.resolve(__dirname, 'client'),
     },
     proxy: {
-      '/entries': 'http://localhost:3000',
+      '/api': 'http://localhost:3000',
       '/form': 'http://localhost:3000',
     },
   },
