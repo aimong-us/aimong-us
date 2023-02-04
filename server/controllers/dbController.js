@@ -55,4 +55,68 @@ dbController.postMessages = async (req, res, next) => {
   }
 };
 
+dbController.getUsers = async (req, res, next) => {
+  try {
+    const query = 'SELECT * FROM users';
+    const data = await db.query(query);
+
+    res.locals.users = data.rows;
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'dbController.getUsers',
+        type: 'catch all block getting messages',
+        err: err,
+      })
+    );
+  }
+};
+
+dbController.getUserByUsername = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+
+    const query = 'SELECT * FROM users WHERE username = $1';
+    const data = await db.query(query, [username]);
+    res.locals.user = data.rows[0];
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'dbController.getUserByUsername',
+        type: 'catch all block getting messages',
+        err: err,
+      })
+    );
+  }
+};
+
+dbController.postUser = async (req, res, next) => {
+  try {
+    const { username, password, email } = req.body;
+
+    const query = `
+    INSERT INTO users(username, password, email)
+    VALUES($1, $2, $3)
+    RETURNING *`;
+    const values = [username, password, email];
+
+    const data = await db.query(query, values);
+    console.log(data.rows);
+
+    res.locals.user = data.rows[0];
+
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'postUser',
+        type: 'catch all block posting messages',
+        err: err,
+      })
+    );
+  }
+};
+
 module.exports = dbController;
