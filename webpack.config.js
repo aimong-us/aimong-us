@@ -4,10 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   mode: process.env.NODE_ENV,
   entry: {
-    src: path.join(__dirname, 'client', 'index.js'),
+    index: path.join(__dirname, 'client', 'index.js'),
+    login: path.join(__dirname, 'client', 'login.js'),
+    signup: path.join(__dirname, 'client', 'signup.js'),
   },
   output: {
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
     path: path.join(__dirname, 'client', 'build'),
   },
   module: {
@@ -36,6 +38,18 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'client', 'index.html'),
+      chunks: ['index'],
+      filename: 'index.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'client', 'login.html'),
+      chunks: ['login'],
+      filename: 'login.html',
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, 'client', 'signup.html'),
+      chunks: ['signup'],
+      filename: 'signup.html',
     }),
   ],
   devServer: {
@@ -44,7 +58,6 @@ module.exports = {
     },
     proxy: {
       '/api': 'http://localhost:3000',
-      '/form': 'http://localhost:3000',
     },
   },
 };

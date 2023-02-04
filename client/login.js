@@ -1,7 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import Chat from './components/chat.jsx';
-import './stylesheets/chat.scss';
+import Login from './components/login.jsx';
 
 const root = createRoot(document.getElementById('root'));
-root.render(<Chat />);
+root.render(<Login />);
