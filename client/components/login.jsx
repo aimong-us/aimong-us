@@ -1,20 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
 const Login = () => {
+  // Set state
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigate = useNavigate();
-
+  // Handler to set state of controlled input elements
   const handleInput = (e) => {
     if (e.target.name === 'username') setUsername(e.target.value);
     if (e.target.name === 'password') setPassword(e.target.value);
   };
 
+  // Handler to send request to to verify login credentials
+  // TODO: error handling based on response
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/api/login', {
+      await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,9 +25,6 @@ const Login = () => {
           password,
         }),
       });
-
-      if (response.status === 302) return navigate('/');
-      else throw new Error('failed to validate credentials');
     } catch (err) {
       console.log(err);
     }
