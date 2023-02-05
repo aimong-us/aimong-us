@@ -15,7 +15,7 @@ const Login = () => {
   // TODO: error handling based on response
   const handleSubmit = async () => {
     try {
-      await fetch('/api/login', {
+      await fetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -30,6 +30,7 @@ const Login = () => {
     }
   };
 
+  // Render component
   return (
     <div className="login-container">
       <div className="login">
@@ -48,7 +49,7 @@ const Login = () => {
         <button onClick={handleSubmit}>Login</button>
         <hr />
         <p>Don't have an account?</p>
-        <p>Sign up!</p>
+        <a href="/signup">Sign up!</a>
       </div>
     </div>
   );
