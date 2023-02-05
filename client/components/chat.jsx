@@ -19,7 +19,7 @@ const Chat = () => {
         },
         body: JSON.stringify(messageInput),
       });
-      if (response.status === 204) setMessageInput(''); // reset input value
+      if (response.status === 201) setMessageInput(''); // reset input value
       else {
         const error = await response.json();
         throw new Error(error.message);

@@ -15,7 +15,7 @@ const Login = () => {
   // TODO: error handling based on response
   const handleSubmit = async () => {
     try {
-      await fetch('/login', {
+      const response = await fetch('/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,6 +25,12 @@ const Login = () => {
           password,
         }),
       });
+      if (response.status === 200) {
+        window.location = '/';
+      } else {
+        const error = response.json();
+        throw new Error(error.message);
+      }
     } catch (err) {
       console.log(err);
     }
