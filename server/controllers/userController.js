@@ -64,7 +64,6 @@ userController.verifyUsername = async (req, res, next) => {
 userController.verifyPassword = async (req, res, next) => {
   try {
     const { username, password: plaintextPassword } = res.locals;
-    console.log(username, plaintextPassword);
 
     const dbQuery = 'SELECT password from users WHERE username = $1';
     const response = await db.query(dbQuery, [username]);
@@ -78,9 +77,18 @@ userController.verifyPassword = async (req, res, next) => {
     }
     const hash = response.rows[0].password;
     const validPassword = await bcrypt.compare(plaintextPassword, hash);
-    res.locals.password = hash;
     res.locals.validPassword = validPassword;
-    return next();
+    if (validPassword) {
+      res.locals.password = hash;
+      return next();
+    } else {
+      return next(
+        createErr({
+          method: 'verifyPassword',
+          type: 'invalid password',
+        })
+      );
+    }
 
     // try {
     //   const { password } = res.locals;
