@@ -4,10 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=production node server/server.js",
     "build": "cross-env NODE_ENV=production webpack",
-    "dev": "cross-env NODE_ENV=development webpack serve & nodemon server/server.js"
+    "dev": "cross-env NODE_ENV=development webpack --watch & nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -33,10 +32,7 @@
     "pg": "^8.9.0",
     "postcss-loader": "^7.0.2",
     "react": "^18.2.0",
-    "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
-    "react-router": "^6.8.0",
-    "react-router-dom": "^6.8.0",
     "sass": "^1.58.0",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1"
@@ -52,7 +48,6 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.32.2",
-    "html-webpack-plugin": "^5.5.0",
     "nodemon": "^2.0.20",
     "prettier": "^2.8.3",
     "webpack": "^5.75.0",

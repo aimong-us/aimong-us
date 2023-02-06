@@ -1,5 +1,4 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV,
@@ -24,7 +23,6 @@ module.exports = {
           },
         },
       },
-      // MAKE SURE THIS SASS STUFF WORKS
       {
         test: /\.(sa|sc|c)ss$/,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
@@ -32,32 +30,6 @@ module.exports = {
     ],
   },
   resolve: {
-    // Enable importing JS / JSX files without specifying their extension
     extensions: ['.js', '.jsx'],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'client', 'index.html'),
-      chunks: ['index'],
-      filename: 'index.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'client', 'login.html'),
-      chunks: ['login'],
-      filename: 'login.html',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'client', 'signup.html'),
-      chunks: ['signup'],
-      filename: 'signup.html',
-    }),
-  ],
-  devServer: {
-    static: {
-      directory: path.resolve(__dirname, 'client'),
-    },
-    proxy: {
-      '/api': 'http://localhost:3000',
-    },
   },
 };
