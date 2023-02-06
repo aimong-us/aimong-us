@@ -103,9 +103,10 @@ dbController.postUser = async (req, res, next) => {
     const values = [username, password, email];
 
     const data = await db.query(query, values);
-    console.log(data.rows);
 
-    res.locals.user = data.rows[0];
+    res.locals.username = data.rows[0].username;
+    res.locals.validUser = true;
+    res.locals.validPassword = true;
 
     return next();
   } catch (err) {
@@ -113,6 +114,33 @@ dbController.postUser = async (req, res, next) => {
       createErr({
         method: 'postUser',
         type: 'catch all block posting messages',
+        err: err,
+      })
+    );
+  }
+};
+
+dbController.storeSsid = async (req, res, next) => {
+  try {
+    console.log('storing ssid in the database...');
+
+    const { username, ssid } = res.locals;
+
+    const query = `
+    UPDATE users
+    SET ssid = $1
+    WHERE username = $2
+    RETURNING ssid`;
+    const values = [ssid, username];
+
+    let updatedUser = await db.query(query, values);
+
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'dbController.storeSsid',
+        type: 'problem storing the ssid in the database',
         err: err,
       })
     );
