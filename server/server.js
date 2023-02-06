@@ -1,15 +1,20 @@
 require('dotenv').config();
 const exp = require('constants');
 const path = require('path');
-
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
 
 const routerAPI = require('./routes/api.js');
+const userController = require('./controllers/userController.js');
+const dbController = require('./controllers/dbController.js');
+const cookieController = require('./controllers/cookieController.js');
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
 
@@ -29,28 +34,39 @@ app.get('/signup', (req, res) => {
 
 app.post(
   '/login',
-  //middleware in usercontroller to verify username
-  //middleware in usercontorller to verify pw
-  //middleware in usercontroller to generate session
-  //middleware in cookieController to set session cookie
+  userController.verifyUsername,
+  userController.verifyPassword,
+  userController.generateSession,
+  dbController.storeSsid,
+  cookieController.setSsidCookie,
   (req, res) => {
+    // console.log(res.locals);
     res.status(302).redirect('/');
   }
 );
 
 app.post(
   '/signup',
-  //middleware in dbController to create username and pw and session
-  //middleware in cookieController to set session cookie
+  dbController.postUser,
+  userController.generateSession,
+  dbController.storeSsid,
+  cookieController.setSsidCookie,
   (req, res) => {
+    // console.log(res.locals);
     res.status(302).redirect('/');
   }
 );
 
-app.get('/', (req, res) =>
-  res
-    .status(200)
-    .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
+app.get(
+  '/',
+  //TODO: check for session cookie and redirect to login if missing
+  cookieController.getSsidCookie,
+  cookieController.verifySsidCookie,
+  // validate cookie on database (query users for that ssid, see if you get anything back)
+  (req, res) =>
+    res
+      .status(200)
+      .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
 );
 
 //catch-all route
