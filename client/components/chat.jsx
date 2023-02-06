@@ -34,7 +34,7 @@ const Chat = () => {
   useEffect(() => {
     const fetchAndSetSenderId = async () => {
       try {
-        const response = await fetch('/api/userid'); // update endpoint when ready
+        const response = await fetch('/api/user_id'); // update endpoint when ready
         const userId = await response.json();
         setSenderId(userId.user_id); // update properties to match up if needed
       } catch (err) {

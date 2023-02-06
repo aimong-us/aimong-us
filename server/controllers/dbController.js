@@ -17,7 +17,8 @@ const createErr = (errObj) => {
 
 dbController.getMessages = async (req, res, next) => {
   try {
-    const query = 'SELECT * FROM messages';
+    const query =
+      'SELECT m.*, users.username FROM messages m INNER JOIN users ON users.user_id = m.sender_id';
     const data = await db.query(query);
     res.locals.messages = data.rows;
     return next();
@@ -92,9 +93,29 @@ dbController.getUserByUsername = async (req, res, next) => {
   }
 };
 
+dbController.getUserBySsid = async (req, res, next) => {
+  try {
+    const { ssid } = res.locals;
+    const query = 'SELECT * FROM users WHERE ssid = $1';
+    const data = await db.query(query, [ssid]);
+
+    res.locals.user_id = data.rows[0].user_id;
+    return next();
+  } catch (err) {
+    return next(
+      createErr({
+        method: 'dbController.getUserBySsid',
+        type: 'catch all block getting getting by ssid',
+        err: err,
+      })
+    );
+  }
+};
+
 dbController.postUser = async (req, res, next) => {
   try {
-    const { username, password, email } = req.body;
+    const { username, password, email } = res.locals;
+    console.log(username, password, email);
 
     const query = `
     INSERT INTO users(username, password, email)
@@ -103,6 +124,7 @@ dbController.postUser = async (req, res, next) => {
     const values = [username, password, email];
 
     const data = await db.query(query, values);
+    console.log(data.rows);
 
     res.locals.username = data.rows[0].username;
     res.locals.validUser = true;
