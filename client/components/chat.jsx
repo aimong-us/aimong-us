@@ -5,6 +5,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [pollIntervalId, setPollIntervalId] = useState(null);
+  const [aiIntervalId, setAIIntervalId] = useState(null);
 
   // Handler to update state of controlled input
   const handleMessageInput = (e) => setMessageInput(e.target.value);
@@ -27,6 +28,35 @@ const Chat = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleStart = async () => {
+    console.log('starting interval!');
+    // post request to create an ai user
+
+    const intervalId = setInterval(async () => {
+      console.log('interval!');
+      try {
+        // post request to create an ai message from the ai user
+        fetch('/api/ai-message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ sender_id: 1 }), // setting to 1 for testing
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }, 5000);
+
+    setAIIntervalId(intervalId);
+  };
+
+  const handleEnd = async () => {
+    console.log('clearing interval!');
+    // cleanup: request to delete ai user/delete their messages?
+    clearInterval(aiIntervalId);
   };
 
   // On mount initialize setinterval to long poll api for messages and update state
@@ -68,6 +98,14 @@ const Chat = () => {
   return (
     <div className="chatroom">
       <h1>AI-mong Us</h1>
+      <div className="ai-buttons">
+        <button className="ai-button" onClick={handleStart}>
+          Begin
+        </button>
+        <button className="ai-button" onClick={handleEnd}>
+          End
+        </button>
+      </div>
       <div className="messages">{messageElementList}</div>
 
       <div className="message-input">
