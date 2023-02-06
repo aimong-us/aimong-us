@@ -35,13 +35,7 @@ cookieController.getSsidCookie = (req, res, next) => {
     const { ssid } = req.cookies;
 
     if (!ssid) {
-      return next(
-        createErr({
-          method: 'cookieController.getSsidCookie',
-          type: 'ssid cookie is undefined',
-          err: err,
-        })
-      );
+      res.redirect('/login');
     }
 
     res.locals.ssid = ssid;
@@ -75,13 +69,13 @@ cookieController.verifySsidCookie = async (req, res, next) => {
     } else {
       res.locals.isValidSession = false;
       res.redirect('/login');
-      // return next(
-      //   createErr({
-      //     method: 'cookieController.verifySsidCookie',
-      //     type: 'no session found',
-      //     err: err,
-      //   })
-      // );
+      return next(
+        createErr({
+          method: 'cookieController.verifySsidCookie',
+          type: 'no session found',
+          err: err,
+        })
+      );
     }
   } catch (error) {
     return next(
