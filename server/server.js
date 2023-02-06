@@ -1,8 +1,9 @@
 require('dotenv').config();
 const exp = require('constants');
 const path = require('path');
-
 const express = require('express');
+const cookieParser = require('cookie-parser');
+
 const app = express();
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
@@ -13,6 +14,7 @@ const dbController = require('./controllers/dbController.js');
 const cookieController = require('./controllers/cookieController.js');
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
 
@@ -36,6 +38,7 @@ app.post(
   userController.verifyPassword,
   userController.generateSession,
   dbController.storeSsid,
+  cookieController.setSsidCookie,
   (req, res) => {
     // console.log(res.locals);
     res.status(302).redirect('/');
@@ -47,16 +50,23 @@ app.post(
   dbController.postUser,
   userController.generateSession,
   dbController.storeSsid,
+  cookieController.setSsidCookie,
   (req, res) => {
     // console.log(res.locals);
     res.status(302).redirect('/');
   }
 );
 
-app.get('/', (req, res) =>
-  res
-    .status(200)
-    .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
+app.get(
+  '/',
+  //TODO: check for session cookie and redirect to login if missing
+  cookieController.getSsidCookie,
+  cookieController.verifySsidCookie,
+  // validate cookie on database (query users for that ssid, see if you get anything back)
+  (req, res) =>
+    res
+      .status(200)
+      .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
 );
 
 //catch-all route
