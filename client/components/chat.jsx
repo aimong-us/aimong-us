@@ -68,7 +68,10 @@ const Chat = () => {
   return (
     <div className="chatroom">
       <h1>AI-mong Us</h1>
-      <div className="messages">{messageElementList}</div>
+
+      <div className="messages">
+        <div>{messageElementList}</div>
+      </div>
 
       <div className="message-input">
         <input
