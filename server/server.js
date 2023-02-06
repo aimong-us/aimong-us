@@ -84,6 +84,15 @@ app.get(
 // WEBSOCKETS
 io.on('connection', (socket) => {
   console.log('user connected');
+  socket.on('send-message', async (body) => {
+    console.log(body);
+
+    const data = await dbController.sendMessageFromSocket(body);
+    console.log(data);
+    body.message;
+
+    io.emit('receive-message', data);
+  });
 });
 
 //catch-all route

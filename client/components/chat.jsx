@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
-// console.log(io);
+
 const socket = io();
 
 const Chat = () => {
-  // Set inital states
+  // Set initial states
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [pollIntervalId, setPollIntervalId] = useState(null);
@@ -13,27 +13,13 @@ const Chat = () => {
   // Handler to update state of controlled input
   const handleMessageInput = (e) => setMessageInput(e.target.value);
 
-  // Handler to send POST request and create a new message
-  const handleMessageSend = async () => {
-    try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ sender_id: senderId, message: messageInput }), // update properties to match up if needed
-      });
-      if (response.status === 201) setMessageInput(''); // reset input value
-      else {
-        const error = await response.json();
-        throw new Error(error.message);
-      }
-    } catch (err) {
-      console.log(err);
-    }
+  // Handler to create a new message
+  const handleMessageSend = () => {
+    socket.emit('send-message', { sender_id: senderId, message: messageInput });
+    setMessageInput('');
   };
 
-  // On mount fetch sender id + initialize setinterval to long poll api for messages and update state
+  // On mount fetch sender id
   useEffect(() => {
     socket.on('connect', () => console.log('websockets babyyyyyy'));
 
@@ -47,25 +33,28 @@ const Chat = () => {
       }
     };
 
-    fetchAndSetSenderId();
-
-    const intervalId = setInterval(async () => {
+    const fetchAllMessages = async () => {
       try {
         const response = await fetch('/api/messages');
         if (response.status === 200) {
           const body = await response.json();
           setMessages(body.messages);
-          setPollIntervalId(intervalId);
         } else {
           const error = response.json();
           throw new Error(error.message);
         }
       } catch (err) {
         console.log(err);
-        clearInterval(pollIntervalId);
       }
-    }, 1000);
+    };
+
+    fetchAndSetSenderId();
+    fetchAllMessages();
   }, []);
+
+  socket.on('receive-message', (message) => {
+    setMessages([...messages, message]);
+  });
 
   // Create list of message elements to render
   const messageElementList = messages.map((message) => {
