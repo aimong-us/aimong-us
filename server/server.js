@@ -1,8 +1,8 @@
 require('dotenv').config();
 const exp = require('constants');
-const express = require('express');
 const path = require('path');
 
+const express = require('express');
 const app = express();
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
@@ -10,6 +10,8 @@ const DB_KEY = process.env.DB_KEY;
 const routerAPI = require('./routes/api.js');
 
 app.use(express.json());
+
+app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
 
 app.use('/api', routerAPI);
 
@@ -45,15 +47,11 @@ app.post(
   }
 );
 
-//production env build routes for homepage, static files
-if (process.env.NODE_ENV === 'production') {
-  app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
-  app.get('/', (req, res) =>
-    res
-      .status(200)
-      .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
-  );
-}
+app.get('/', (req, res) =>
+  res
+    .status(200)
+    .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
+);
 
 //catch-all route
 app.use('/', (req, res, next) =>
