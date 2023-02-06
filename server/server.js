@@ -1,10 +1,19 @@
 require('dotenv').config();
 const exp = require('constants');
 const path = require('path');
-const express = require('express');
 const cookieParser = require('cookie-parser');
 
+const express = require('express');
 const app = express();
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+
+// console.log(io);
+
+// const io = require('socket.io')(3001);
+
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
 
@@ -72,6 +81,20 @@ app.get(
       .sendFile(path.resolve(__dirname, '..', 'client', 'index.html'))
 );
 
+// WEBSOCKETS
+io.on('connection', (socket) => {
+  console.log('user connected');
+  socket.on('send-message', async (body) => {
+    console.log(body);
+
+    const data = await dbController.sendMessageFromSocket(body);
+    console.log(data);
+    body.message;
+
+    io.emit('receive-message', data);
+  });
+});
+
 //catch-all route
 app.use('/', (req, res, next) =>
   //TODO add a 404 page to route to
@@ -94,6 +117,6 @@ app.use((err, req, res, next) => {
   return res.status(errorObj.status).json(errorObj.message);
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on PORT ${PORT}`);
 });
