@@ -34,6 +34,7 @@ app.get('/signup', (req, res) => {
 
 app.post(
   '/login',
+  userController.getUserInfoFromBody,
   userController.verifyUsername,
   userController.verifyPassword,
   userController.generateSession,
@@ -47,6 +48,8 @@ app.post(
 
 app.post(
   '/signup',
+  userController.getUserInfoFromBody,
+  userController.encryptPassword,
   dbController.postUser,
   userController.generateSession,
   dbController.storeSsid,

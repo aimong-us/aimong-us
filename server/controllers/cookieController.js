@@ -68,14 +68,16 @@ cookieController.verifySsidCookie = async (req, res, next) => {
       return next();
     } else {
       res.locals.isValidSession = false;
-      res.redirect('/login');
-      return next(
-        createErr({
-          method: 'cookieController.verifySsidCookie',
-          type: 'no session found',
-          err: err,
-        })
-      );
+      console.log('cookie INVALID!');
+      res.status(302).redirect('./login');
+      return;
+      // return next(
+      //   createErr({
+      //     method: 'cookieController.verifySsidCookie',
+      //     type: 'no session found',
+      //     err: err,
+      //   })
+      // );
     }
   } catch (error) {
     return next(
