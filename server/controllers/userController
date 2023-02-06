@@ -1,5 +1,65 @@
+const { query } = require('express');
 const db = require('../models/chatroomModels.js');
 
 const userController = {};
+
+userController.verifyUsername = async (req, res, next) => {
+  try {
+    const { username } = req.body;
+    const values = [username];
+    const userQuery = 'SELECT * FROM users WHERE username=$1';
+    if (!username)
+      return next({
+        message: { err: 'Invalid username or password' }, // how to error handle invalid username/pw?
+      });
+    const user = await db.query(userQuery, values);
+    console.log('user retrieved', user);
+    if (user) {
+      res.locals.validUser = true;
+    } else {
+      res.locals.validUser = false;
+      return next({
+        message: { err: 'Invalid username or password' },
+      });
+    }
+  } catch (err) {
+    console.log('error in verify user block', err);
+    return next({
+      message: { err: 'Invalid username or password' },
+    });
+  }
+};
+
+userController.verifyPassword = async (req, res, next) => {
+  try {
+    const { password } = req.body;
+    const values = [password];
+    const userQuery = 'SELECT * FROM users WHERE password=$1';
+
+    if (!password)
+      return next({
+        message: { err: 'Invalid username or password' }, // how to error handle invalid username/pw?
+      });
+
+    const user = await db.query(userQuery, values);
+    console.log('password retrieved', user);
+
+    if (user) {
+      res.locals.validPassword = true;
+    } else {
+      res.locals.validPassword = false;
+      return next({
+        message: { err: 'Invalid username or password' },
+      });
+    }
+  } catch (err) {
+    console.log('error in verify password block', err);
+    return next({
+      message: { err: 'Invalid username or password' },
+    });
+  }
+};
+
+userController.generateSession = async (req, res, next) => {};
 
 module.exports = userController;
