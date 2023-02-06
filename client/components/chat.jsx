@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
+// console.log(io);
+const socket = io();
 
 const Chat = () => {
   // Set inital states
@@ -32,6 +35,8 @@ const Chat = () => {
 
   // On mount fetch sender id + initialize setinterval to long poll api for messages and update state
   useEffect(() => {
+    socket.on('connect', () => console.log('websockets babyyyyyy'));
+
     const fetchAndSetSenderId = async () => {
       try {
         const response = await fetch('/api/user_id'); // update endpoint when ready
