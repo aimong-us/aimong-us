@@ -11,22 +11,22 @@ const Chat = () => {
 
   // Handler to send POST request and create a new message
   const handleMessageSend = async () => {
-    // try {
-    //   const response = await fetch('/api/messages', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(messageInput),
-    //   });
-    //   if (response.status === 204) setMessageInput(''); // reset input value
-    //   else {
-    //     const error = await response.json();
-    //     throw new Error(error.message);
-    //   }
-    // } catch (err) {
-    //   console.log(err);
-    // }
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageInput),
+      });
+      if (response.status === 204) setMessageInput(''); // reset input value
+      else {
+        const error = await response.json();
+        throw new Error(error.message);
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // On mount initialize setinterval to long poll api for messages and update state
