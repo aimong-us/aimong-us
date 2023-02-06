@@ -68,7 +68,7 @@ const Chat = () => {
 
     return (
       <div key={message.message_id} className="message">
-        <span className="message-user">{message.sender_id}</span>
+        <span className="message-user">{message.username}</span>
         <span className="message-message">{message.message}</span>
         <span className="message-timestamp">
           {dateTime.toLocaleTimeString()}
@@ -91,6 +91,9 @@ const Chat = () => {
           placeholder="Say something to the chat..."
           value={messageInput}
           onChange={handleMessageInput}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleMessageSend();
+          }}
         ></input>
         <button onClick={handleMessageSend}>Send</button>
       </div>
