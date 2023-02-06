@@ -5,6 +5,7 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [pollIntervalId, setPollIntervalId] = useState(null);
+  const [senderId, setSenderId] = useState(null);
 
   // Handler to update state of controlled input
   const handleMessageInput = (e) => setMessageInput(e.target.value);
@@ -17,7 +18,7 @@ const Chat = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(messageInput),
+        body: JSON.stringify({ sender_id: senderId, message: messageInput }), // update properties to match up if needed
       });
       if (response.status === 201) setMessageInput(''); // reset input value
       else {
@@ -29,8 +30,20 @@ const Chat = () => {
     }
   };
 
-  // On mount initialize setinterval to long poll api for messages and update state
+  // On mount fetch sender id + initialize setinterval to long poll api for messages and update state
   useEffect(() => {
+    const fetchAndSetSenderId = async () => {
+      try {
+        const response = await fetch('/api/userid'); // update endpoint when ready
+        const userId = await response.json();
+        setSenderId(userId.user_id); // update properties to match up if needed
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchAndSetSenderId();
+
     const intervalId = setInterval(async () => {
       try {
         const response = await fetch('/api/messages');

@@ -27,6 +27,11 @@ body {
   margin: 15px auto 15px auto;
 }
 
+.login h2 {
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
 .login p {
   text-align: center;
   margin-bottom: 5px;
@@ -39,4 +44,23 @@ body {
   text-align: center;
   margin-bottom: 15px;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.labeled-input {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+.labeled-input input {
+  margin: 0px 0px 0px 10px;
+}
+
+.error {
+  color: red;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  text-align: center;
 }
