@@ -7,7 +7,6 @@ const Chat = () => {
   // Set initial states
   const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
-  const [pollIntervalId, setPollIntervalId] = useState(null);
   const [senderId, setSenderId] = useState(null);
 
   // Handler to update state of controlled input
@@ -19,10 +18,8 @@ const Chat = () => {
     setMessageInput('');
   };
 
-  // On mount fetch sender id
+  // On mount fetch sender id and all messages from db
   useEffect(() => {
-    socket.on('connect', () => console.log('websockets babyyyyyy'));
-
     const fetchAndSetSenderId = async () => {
       try {
         const response = await fetch('/api/user_id'); // update endpoint when ready
@@ -52,6 +49,7 @@ const Chat = () => {
     fetchAllMessages();
   }, []);
 
+  // Receive new messages
   socket.on('receive-message', (message) => {
     setMessages([...messages, message]);
   });

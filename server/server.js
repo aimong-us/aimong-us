@@ -10,10 +10,6 @@ const server = http.createServer(app);
 const { Server } = require('socket.io');
 const io = new Server(server);
 
-// console.log(io);
-
-// const io = require('socket.io')(3001);
-
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
 
@@ -21,6 +17,7 @@ const routerAPI = require('./routes/api.js');
 const userController = require('./controllers/userController.js');
 const dbController = require('./controllers/dbController.js');
 const cookieController = require('./controllers/cookieController.js');
+const aiController = require('./controllers/aiController.js');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -93,6 +90,29 @@ io.on('connection', (socket) => {
 
     io.emit('receive-message', data);
   });
+
+  // Generate ai messages
+  const startAiEmit = async (socket) => {
+    const emitAiMessage = (socket, aiUserId) => {
+      setTimeout(async () => {
+        console.log('generating a new AI message...');
+        const aiMessage = await aiController.getAiMessage();
+        const messageObject = await dbController.sendAiMessageFromSocket(
+          aiMessage,
+          aiUserId
+        );
+
+        socket.emit('receive-message', messageObject);
+
+        emitAiMessage(socket, aiUserId);
+      }, Math.random() * (10000 - 5000) + 5000);
+    };
+
+    const aiUserId = await aiController.getAiUser();
+    emitAiMessage(socket, aiUserId);
+  };
+
+  startAiEmit(socket);
 });
 
 //catch-all route

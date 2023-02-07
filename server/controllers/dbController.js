@@ -190,4 +190,23 @@ dbController.sendMessageFromSocket = async (body) => {
   }
 };
 
+dbController.sendAiMessageFromSocket = async (aiMessage, aiUserId) => {
+  try {
+    const time = Date.now(); // will return the ms ***** come back here for date time *** issues
+    //will this leave us vulnerable to SQL Inj? if so, how fix?
+    const query = `INSERT INTO messages(sender_id, message) VALUES($1, $2) RETURNING *`;
+    const values = [aiUserId, aiMessage];
+
+    const data = await db.query(query, values);
+
+    const query2 = `SELECT username FROM users WHERE user_id = $1`;
+    const data2 = await db.query(query2, [aiUserId]);
+    const username = data2.rows[0].username;
+
+    return { ...data.rows[0], username };
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = dbController;
