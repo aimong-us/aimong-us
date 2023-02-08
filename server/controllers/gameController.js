@@ -38,4 +38,8 @@ gameController.getLeaderboard = async (req, res, next) => {
   return next();
 };
 
+gameController.resetLeaderBoard = async (req, res, next) => {
+  
+};
+
 module.exports = gameController;

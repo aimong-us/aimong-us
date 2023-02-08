@@ -35,7 +35,8 @@ dbController.getMessages = async (req, res, next) => {
 
 dbController.postMessages = async (req, res, next) => {
   try {
-    const { sender_id, message } = req.body;
+    // const { sender_id, message } = req.body;
+    const { sender_id, message } = res.locals.message ?? req.body;
     const time = Date.now(); // will return the ms ***** come back here for date time *** issues
     //will this leave us vulnerable to SQL Inj? if so, how fix?
     const query = `INSERT INTO messages(sender_id, message) VALUES($1, $2) RETURNING *`;
