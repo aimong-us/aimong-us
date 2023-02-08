@@ -51,7 +51,10 @@ aiController.getAiMessage = (req, res, next) => {
       // console.log(req.body.message);
       // return next();
     }).then((data)=>{
-      res.locals.message = data.choices[0].text.trim();
+      res.locals.message = {
+        sender_id: 1,
+        message: data.choices[0].text.trim()
+      };
       return next();
     })
     .catch((error) => {
