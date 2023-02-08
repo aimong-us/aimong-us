@@ -12,6 +12,17 @@ router.post('/messages', dbController.postMessages, (req, res) => {
   return res.status(201).json({ messages: res.locals.newMessage });
 });
 
+//post message retrieved from openAI
+
+router.post(
+  '/ai-message',
+   dbController.getMessages,
+   aiController.getAiMessage,
+   dbController.postMessages,
+   (req,res) =>{
+    return res.sendStatus(204).json({ messages: res.locals.newMessage });
+   })
+
 // get a full list of users
 router.get('/users', dbController.getUsers, (req, res) => {
   return res.status(200).json({ users: res.locals.users });
@@ -41,13 +52,5 @@ router.post('/users', dbController.postUser, (req, res) => {
   return res.status(201).json(user);
 });
 
-router.post(
-  '/ai-message',
-   dbController.getMessages,
-   aiController.getAiMessage,
-   dbController.postMessages,
-   (req,res) =>{
-    return res.sendStatus(204);
-   })
 
 module.exports = router;

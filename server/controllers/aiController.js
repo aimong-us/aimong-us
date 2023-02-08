@@ -36,7 +36,7 @@ aiController.getAiMessage = (req, res, next) => {
       body: JSON.stringify({
         model: 'text-davinci-003',
         prompt: `You are in a online chatroom, and this array contains the messages that have 
-        been sent in the chatroom so far: ${shortenMessages}. Write a fun message to send as if you were 
+        been sent in the chatroom so far: ${shortenedMessages}. Write a fun message to send as if you were 
         a participant in this chatroom, but do everything you can to hide the fact that you are not human.`,
         temperature: 0.9,
         max_tokens: 50,
@@ -44,9 +44,15 @@ aiController.getAiMessage = (req, res, next) => {
       }),
     })
     .then((response) => {
-      req.body.message = response.data.choices[0].text;
-      console.log(response);
-      return next;
+      // req.body.message = response.data.choices[0].text;
+      console.log('this is working');
+      return response.json()
+      // console.log(response);
+      // console.log(req.body.message);
+      // return next();
+    }).then((data)=>{
+      res.locals.message = data.choices[0].text.trim();
+      return next();
     })
     .catch((error) => {
       return next(
@@ -57,6 +63,9 @@ aiController.getAiMessage = (req, res, next) => {
         })
       )
     })
+    // .catch(()=> {
+    //   console.log('this is not working');
+    // })
 }
 
 
