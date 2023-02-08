@@ -16,7 +16,7 @@ const io = new Server(server);
 
 const PORT = 3000;
 const DB_KEY = process.env.DB_KEY;
-
+const checkerRouter = require('./routes/checkerRouter.js');
 const routerAPI = require('./routes/api.js');
 const userController = require('./controllers/userController.js');
 const dbController = require('./controllers/dbController.js');
@@ -28,6 +28,7 @@ app.use(cookieParser());
 app.use('/client', express.static(path.resolve(__dirname, '..', 'client')));
 
 app.use('/api', routerAPI);
+app.use('/check', checkerRouter);
 
 app.get('/login', (req, res) => {
   res
