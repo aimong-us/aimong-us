@@ -20,7 +20,7 @@ router.post(
    aiController.getAiMessage,
    dbController.postMessages,
    (req,res) =>{
-    return res.sendStatus(204);
+    return res.sendStatus(204).json({ messages: res.locals.newMessage });
    })
 
 // get a full list of users
