@@ -1,14 +1,14 @@
 const express = require('express');
-const {} = require('../controllers/checkerController');
+const {
+  checkAndIncrement,
+  getLeaderboard,
+} = require('../controllers/gameController');
 const router = express.Router();
 // const dbController = require('../controllers/dbController.js');
 
-router.use(
-  '/',
-  /** controllers */ (req, res) => {
-    res.status(201).json({});
-  }
-);
+router.post('/', checkAndIncrement, getLeaderboard, (req, res) => {
+  res.status(201).json(res.locals.response);
+});
 
 // TODO
 
@@ -19,4 +19,17 @@ router.use(
 //     decrement clicker
 //     increment message creators
 
+const body = {
+  message_id: 'int',
+  sender_id: 'int',
+  user_id: 'int',
+};
+
 module.exports = router;
+
+const response = {
+  first_place: ['username', 'score'],
+  second_place: ['username', 'score'],
+  third_place: ['username', 'score'],
+  current_user: ['username', 'score'],
+};
