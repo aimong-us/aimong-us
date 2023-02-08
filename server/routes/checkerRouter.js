@@ -19,17 +19,17 @@ router.post('/', checkAndIncrement, getLeaderboard, (req, res) => {
 //     decrement clicker
 //     increment message creators
 
-const body = {
-  message_id: 'int',
-  sender_id: 'int',
-  user_id: 'int',
-};
+// const body = {
+//   message_id: 'int',
+//   sender_id: 'int',
+//   user_id: 'int',
+// };
 
 module.exports = router;
 
-const response = {
-  first_place: ['username', 'score'],
-  second_place: ['username', 'score'],
-  third_place: ['username', 'score'],
-  current_user: ['username', 'score'],
-};
+// const response = {
+//   first_place: ['username', 'score'],
+//   second_place: ['username', 'score'],
+//   third_place: ['username', 'score'],
+//   current_user: ['username', 'score'],
+// };
