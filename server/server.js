@@ -94,6 +94,13 @@ io.on('connection', (socket) => {
 
     io.emit('receive-message', data);
   });
+
+  socket.on('ai-message', async (body) => {
+    // const message =  await aiController.getAiMessage();
+
+    // io.emit('receive-message')
+    console.log('test');
+  });
 });
 
 //catch-all route
