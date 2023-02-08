@@ -173,7 +173,7 @@ dbController.sendMessageFromSocket = async (body) => {
   console.log(body);
   try {
     const { sender_id, message } = body;
-    const time = Date.now(); // will return the ms ***** come back here for date time *** issues
+    const time = '12/'; // will return the ms ***** come back here for date time *** issues
     //will this leave us vulnerable to SQL Inj? if so, how fix?
     const query = `INSERT INTO messages(sender_id, message) VALUES($1, $2) RETURNING *`;
     const values = [sender_id, message];
