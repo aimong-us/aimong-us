@@ -18,7 +18,7 @@ const createErr = (errObj) => {
 dbController.getMessages = async (req, res, next) => {
   try {
     const query =
-      'SELECT m.*, users.username FROM messages m INNER JOIN users ON users.user_id = m.sender_id';
+      'SELECT m.*, users.username FROM messages AS m INNER JOIN users ON users.user_id = m.sender_id';
     const data = await db.query(query);
     res.locals.messages = data.rows;
     return next();

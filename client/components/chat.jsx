@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
+import Message from './message';
 
 const socket = io();
 
@@ -58,16 +59,15 @@ const Chat = () => {
 
   // Create list of message elements to render
   const messageElementList = messages.map((message) => {
-    const dateTime = new Date(message.time);
-
     return (
-      <div key={message.message_id} className="message">
-        <span className="message-user">{message.username}</span>
-        <span className="message-message">{message.message}</span>
-        <span className="message-timestamp">
-          {dateTime.toLocaleTimeString()}
-        </span>
-      </div>
+      <Message
+        sender_id={message.sender_id}
+        username={message.username}
+        message={message.message}
+        dateTime={message.time}
+        key={message.message_id}
+        id={message.message_id}
+      />
     );
   });
 
