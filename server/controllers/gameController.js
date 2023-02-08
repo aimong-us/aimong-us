@@ -33,9 +33,13 @@ gameController.getLeaderboard = async (req, res, next) => {
     first_place: [rows[0].username, rows[0].points],
     second_place: [rows[1].username, rows[1].points],
     third_place: [rows[2].username, rows[2].points],
-    current_user: [rows[3].username, rows[3].points],
+    current_user: [rows[3]?.username, rows[3]?.points],
   };
   return next();
+};
+
+gameController.resetLeaderBoard = async (req, res, next) => {
+  
 };
 
 module.exports = gameController;
