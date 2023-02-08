@@ -1,34 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Message from './message';
+import Leaderboard from './leaderboard';
 
 const socket = io();
 
 const Chat = () => {
   // Set initial states
   const [messages, setMessages] = useState([]);
+  const [leaderboard, setLeaderboard] = useState([]);
   const [messageInput, setMessageInput] = useState('');
   const [pollIntervalId, setPollIntervalId] = useState(null);
-  const [senderId, setSenderId] = useState(null);
+  const [userId, setuserId] = useState(null);
 
   // Handler to update state of controlled input
   const handleMessageInput = (e) => setMessageInput(e.target.value);
 
   // Handler to create a new message
   const handleMessageSend = () => {
-    socket.emit('send-message', { sender_id: senderId, message: messageInput });
+    socket.emit('send-message', { sender_id: userId, message: messageInput });
     setMessageInput('');
+  };
+
+  const handleAiMessage = () => {
+    socket.emit('ai-message');
   };
 
   // On mount fetch sender id
   useEffect(() => {
     socket.on('connect', () => console.log('websockets babyyyyyy'));
 
-    const fetchAndSetSenderId = async () => {
+    const fetchAndSetuserId = async () => {
       try {
         const response = await fetch('/api/user_id'); // update endpoint when ready
         const userId = await response.json();
-        setSenderId(userId.user_id); // update properties to match up if needed
+        setuserId(userId.user_id); // update properties to match up if needed
       } catch (err) {
         console.log(err);
       }
@@ -49,7 +55,7 @@ const Chat = () => {
       }
     };
 
-    fetchAndSetSenderId();
+    fetchAndSetuserId();
     fetchAllMessages();
   }, []);
 
@@ -61,6 +67,7 @@ const Chat = () => {
   const messageElementList = messages.map((message) => {
     return (
       <Message
+        user_id={userId}
         sender_id={message.sender_id}
         username={message.username}
         message={message.message}
@@ -74,7 +81,9 @@ const Chat = () => {
   // Render chatroom elements
   return (
     <div className="chatroom">
-      <h1>AI-mong Us</h1>
+      <h1 onClick={handleAiMessage}>AI-mong Us</h1>
+
+      <Leaderboard></Leaderboard>
 
       <div className="messages">
         <div>{messageElementList}</div>
