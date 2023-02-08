@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dbController = require('../controllers/dbController.js');
 const cookieController = require('../controllers/cookieController.js');
+const aiController = require('../controllers/aiController.js');
 
 router.get('/messages', dbController.getMessages, (req, res) => {
   return res.status(200).json({ messages: res.locals.messages });
@@ -39,5 +40,14 @@ router.post('/users', dbController.postUser, (req, res) => {
 
   return res.status(201).json(user);
 });
+
+router.post(
+  '/ai-message',
+   dbController.getMessages,
+   aiController.getAiMessage,
+   dbController.postMessages,
+   (req,res) =>{
+    return res.sendStatus(204);
+   })
 
 module.exports = router;
