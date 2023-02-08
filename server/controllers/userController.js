@@ -45,7 +45,7 @@ userController.verifyUsername = async (req, res, next) => {
         createErr({
           method: 'verifyUsername',
           type: 'Username not found in DB',
-          err: err,
+          err: 'err',
         })
       );
     }
