@@ -4,7 +4,6 @@ const dbController = require('../controllers/dbController.js');
 const cookieController = require('../controllers/cookieController.js');
 const aiController = require('../controllers/aiController.js');
 
-
 router.get('/messages', dbController.getMessages, (req, res) => {
   return res.status(200).json({ messages: res.locals.messages });
 });
