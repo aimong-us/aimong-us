@@ -18,7 +18,7 @@ const Message = (props) => {
       // console.dir(message);
       // message.style.backgroundColor = 'grey';
       // event.target.style.backgroundColor = 'grey';
-      event.currentTarget.style.backgroundColor = 'grey';
+      event.currentTarget.style.backgroundColor = '#d3d3d3';
 
       fetch('/check', {
         method: 'POST',
@@ -37,14 +37,14 @@ const Message = (props) => {
           const { first_place, second_place, third_place } = data;
           props.setUserScore(data.current_user);
           props.setLeaderboard({
-            1 : `${first_place[0]} : ${first_place[1]}`,
-            2 : `${second_place[0]} : ${second_place[1]}`,
-            3 : `${third_place[0]} : ${third_place[1]}`
+            1: first_place,
+            2: second_place,
+            3: third_place,
           });
-        }).then(() => {
+        })
+        .then(() => {
           console.log(user_id, leaderboard);
         });
-      
     }
   };
   return (
@@ -53,6 +53,13 @@ const Message = (props) => {
       <span className="message-message">{props.message}</span>
       <span className="message-timestamp">
         {date} @ {time}
+      </span>
+      <span className="icon">
+        <img
+          src={`client/assets/${props.image}.webp`}
+          width={'60px'}
+          height={'60px'}
+        />
       </span>
     </div>
   );

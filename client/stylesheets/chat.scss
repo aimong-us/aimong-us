@@ -10,14 +10,58 @@ body {
 }
 
 .chatroom {
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  // grid-template-rows: auto;
+  grid-template-areas:
+    'header header header header header'
+    'sidebar chat chat chat chat';
+}
+
+.chatroom h1 {
+  font-family: amongus;
+  // font-family: Arial, Helvetica, sans-serif;
+  font-size: 48px;
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  justify-content: center;
+}
+
+.messageboard {
+  grid-area: chat;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.chatroom h1 {
-  font-size: 48px;
-  font-family: Arial, Helvetica, sans-serif;
+.leaderboard {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 1.25rem;
+}
+.leaderboard p {
+  // text-align: center;
+  font-family: amongus;
+  font-size: 1.75rem;
+  margin-top: 0;
+}
+
+.leaderboard tr {
+  font-family: amongus;
+}
+
+.leaderboard td {
+  text-align: center;
+  padding: 0.75rem 1.25rem;
+  font-family: 'Indie Flower', cursive;
 }
 
 .messages {
@@ -26,12 +70,21 @@ body {
   height: 50vh;
   display: flex;
   flex-direction: column-reverse;
-  border-top: 1px solid black;
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 1px solid black;
-  background-color: rgb(250, 250, 250);
+  border-top: 3px solid black;
+  border-left: 5px solid black;
+  border-right: 5px solid black;
+  border-bottom: 3px solid black;
+  border-radius: 10px;
+  background-color: rgb(186, 205, 227);
   box-shadow: 0px 0px 5px black;
+}
+.messages::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+.message-input {
+  margin-top: 1.25rem;
+  border-radius: 10px;
 }
 
 .message-input input {
@@ -42,7 +95,9 @@ body {
   border-right: 1px solid black;
   border-bottom: 2px solid black;
   box-shadow: 0px 0px 5px black;
+  border-radius: 10px 0 0 10px;
   height: 25px;
+  font-family: 'Indie Flower', cursive;
 }
 
 .message-input input:focus {
@@ -58,6 +113,8 @@ body {
   border-left: 1px solid black;
   border-right: 2px solid black;
   border-bottom: 2px solid black;
+  border-radius: 0 10px 10px 0;
+  font-family: 'Indie Flower', cursive;
 }
 
 .message-input button:hover {
@@ -68,14 +125,24 @@ body {
 .message {
   display: grid;
   grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'icon user'
+    'icon message'
+    'date date';
   border-radius: 10px;
-  border: thin solid greenyellow;
+  border: none;
   margin: 2%;
-  background-color: antiquewhite;
+  background-color: rgb(250, 250, 250);
+  box-shadow: 5px 3px rgb(104, 113, 124);
+}
+
+.message:hover {
+  background-color: rgb(240, 240, 240);
+  cursor: pointer;
 }
 
 .message-user {
-  grid-row: 1;
+  grid-area: user;
   font-weight: bold;
   margin-left: 5px;
   margin-top: 5px;
@@ -86,8 +153,9 @@ body {
 }
 
 .message-message {
-  grid-column: auto;
-  grid-row: 2;
+  // grid-column: auto;
+  // grid-row: 2;
+  grid-area: message;
   margin-left: 5px;
   margin-top: 5px;
   margin-right: 5px;
@@ -95,11 +163,16 @@ body {
 }
 
 .message-timestamp {
-  grid-row: 3;
-  grid-column: 1 / 3;
+  // grid-row: 3;
+  // grid-column: 1 / 3;
+  grid-area: date;
   font-size: 12px;
   color: rgb(150, 150, 150);
   margin-left: 5px;
   margin-bottom: 5px;
   font-family: 'Indie Flower', cursive;
+}
+
+.icon {
+  grid-area: icon;
 }
