@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import Message from './message';
-import Leaderboard from './leaderboard';
+// import Leaderboard from './leaderboard';
 
 const socket = io();
 
 const Chat = () => {
   // Set initial states
   const [messages, setMessages] = useState([]);
-  const [leaderboard, setLeaderboard] = useState([]);
+  const [leaderboard, setLeaderboard] = useState({ first: '', second: '', third: '' });
+  console.log(leaderboard);
   const [messageInput, setMessageInput] = useState('');
   const [pollIntervalId, setPollIntervalId] = useState(null);
   const [userId, setuserId] = useState(null);
+  const [userScore, setUserScore] = useState(null);
 
   // Handler to update state of controlled input
   const handleMessageInput = (e) => setMessageInput(e.target.value);
@@ -54,7 +56,23 @@ const Chat = () => {
         console.log(err);
       }
     };
+    // const fetchLeaderBoard = async () => {
+    //   try {
+    //     const response = await fetch('/check', {method: 'POST', headers: {'Content-Type': 'application/json'}});
+    //     if (response.status === 200) {
+    //       const body = await response.json();
+    //       console.log(body);
+    //       // setLeaderboard(body)
+    //     } else {
+    //       const error = response.json();
+    //       throw new Error(error.message);
+    //     }
+    //   } catch (err) {
+    //     console.log(err)
+    //   }
+    // }
 
+    // fetchLeaderBoard()
     fetchAndSetuserId();
     fetchAllMessages();
   }, []);
@@ -63,10 +81,26 @@ const Chat = () => {
     setMessages([...messages, message]);
   });
 
+  const createLeaderboard = (leaderboard) => {
+    const result = [];
+    let i = 1;
+    for (const key in leaderboard) {
+      result.push(<div>
+        <span>{key}</span>
+        <span>{leaderboard[key]}</span>
+      </div>);
+    }
+    return result;
+  }
+
+
   // Create list of message elements to render
   const messageElementList = messages.map((message) => {
     return (
       <Message
+        leaderboard={leaderboard}
+        setUserScore={setUserScore}
+        setLeaderboard={setLeaderboard}
         user_id={userId}
         sender_id={message.sender_id}
         username={message.username}
@@ -83,7 +117,11 @@ const Chat = () => {
     <div className="chatroom">
       <h1 onClick={handleAiMessage}>AI-mong Us</h1>
 
-      <Leaderboard></Leaderboard>
+      <div>{createLeaderboard(leaderboard)}</div>
+
+      {/* <Leaderboard
+        leaderboard={leaderboard}
+      /> */}
 
       <div className="messages">
         <div>{messageElementList}</div>

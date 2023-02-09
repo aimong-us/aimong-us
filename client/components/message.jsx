@@ -4,7 +4,8 @@ const Message = (props) => {
   const [clicked, setClicked] = useState(false);
   const [message_id] = useState(props.id);
   const [sender_id] = useState(props.sender_id);
-  const { dateTime, user_id } = props;
+  const [dateTime] = useState(props);
+  const { user_id, leaderboard, userScore } = props;
   const date = new Date(dateTime).toLocaleDateString();
   const time = new Date(dateTime).toLocaleTimeString();
 
@@ -21,27 +22,29 @@ const Message = (props) => {
 
       fetch('/check', {
         method: 'POST',
-        Headers: {
-          Accept: 'application.json',
+        headers: {
+          // 'Accept': 'application.json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           sender_id,
           user_id,
         }),
-        header: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
       })
-        .then((response) => {
-          response.json();
-        })
+        // {first_name : [name, score]....}
+        .then((response) => response.json())
         .then((data) => {
-          console.log(data);
+          const { first_place, second_place, third_place } = data;
+          props.setUserScore(data.current_user);
+          props.setLeaderboard({
+            1 : `${first_place[0]} : ${first_place[1]}`,
+            2 : `${second_place[0]} : ${second_place[1]}`,
+            3 : `${third_place[0]} : ${third_place[1]}`
+          });
+        }).then(() => {
+          console.log(user_id, leaderboard);
         });
-      console.log('user_id', user_id);
-      console.log('message id:', message_id);
-      console.log('sender_id:', sender_id);
+      
     }
   };
   return (
